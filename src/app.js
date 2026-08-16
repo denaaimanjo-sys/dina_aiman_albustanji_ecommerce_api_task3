@@ -6,6 +6,7 @@ const productsRoutes = require("./routes/productsRoutes");
 const categoriesRoutes = require("./routes/categoriesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
 const authRoutes = require("./routes/authRoutes");
+const ordersRoutes = require("./routes/ordersRoutes");
 const {
   notFound,
   errorHandler
@@ -15,7 +16,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes);
+app.use("/api/orders", ordersRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use(notFound);

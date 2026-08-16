@@ -2,6 +2,45 @@ const pool = require("../config/database");
 
 async function getProducts(req, res, next) {
   try {
+    const search =
+      typeof req.query.search === "string"
+        ? req.query.search.trim()
+        : "";
+
+    if (search.length > 100) {
+      return res.status(400).json({
+        success: false,
+        message: "Search text is too long"
+      });
+    }
+
+    let result;
+
+    if (search) {
+      result = await pool.query(
+        `SELECT *
+         FROM products
+         WHERE name ILIKE $1
+            OR description ILIKE $1
+            OR sku ILIKE $1
+         ORDER BY id`,
+        [`%${search}%`]
+      );
+    } else {
+      result = await pool.query(
+        "SELECT * FROM products ORDER BY id"
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      count: result.rowCount,
+      data: result.rows
+    });
+  } catch (error) {
+    next(error);
+  }
+}  try {
     const result = await pool.query(
       "SELECT * FROM products ORDER BY id"
     );

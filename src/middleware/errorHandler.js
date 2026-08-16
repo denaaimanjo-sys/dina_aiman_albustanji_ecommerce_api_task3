@@ -13,11 +13,13 @@ function errorHandler(error, req, res, next) {
     });
   }
 
+  if (process.env.NODE_ENV !== "production") {
   console.error({
     message: error.message,
     method: req.method,
     path: req.originalUrl
   });
+}
 
   res.status(500).json({
     success: false,
