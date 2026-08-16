@@ -40,19 +40,6 @@ async function getProducts(req, res, next) {
   } catch (error) {
     next(error);
   }
-}  try {
-    const result = await pool.query(
-      "SELECT * FROM products ORDER BY id"
-    );
-
-    res.status(200).json({
-      success: true,
-      count: result.rowCount,
-      data: result.rows
-    });
-  } catch (error) {
-    next(error);
-  }
 }
 
 async function getProductById(req, res, next) {

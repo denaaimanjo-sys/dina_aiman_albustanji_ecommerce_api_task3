@@ -162,6 +162,36 @@
           "response": []
         },
         {
+          "name": "18 - Security Logging - 401",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"securitycustomer@test.com\",\r\n  \"password\": \"WrongPassword123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "12 - Login Rate Limit - 429",
           "request": {
             "method": "POST",
@@ -353,6 +383,46 @@
           "response": []
         },
         {
+          "name": "22 - Admin Order Access - 200",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"category_id\": 1,\r\n  \"name\": \"Security Test Product\",\r\n  \"description\": \"Authorization test\",\r\n  \"price\": 10,\r\n  \"stock_quantity\": 5,\r\n  \"sku\": \"SEC-CUST-001\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/orders/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "09 - Negative Price - 400",
           "request": {
             "auth": {
@@ -423,6 +493,37 @@
           "response": []
         },
         {
+          "name": "23 - Non-Numeric ID Rejected - 400",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/users/abc",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "users",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "13 - Unknown Endpoint - 404",
           "request": {
             "method": "GET",
@@ -447,6 +548,54 @@
           "request": {
             "method": "GET",
             "header": [],
+            "url": {
+              "raw": "http://localhost:3000/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "16 - CORS Allowed Origin - 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "http://localhost:5173"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17 - CORS Blocked Origin - 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "http://evil.example"
+              }
+            ],
             "url": {
               "raw": "http://localhost:3000/",
               "protocol": "http",
@@ -495,6 +644,93 @@
               "path": [
                 "api",
                 "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "20 - Customer Own Orders - 200",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "24 - SQL Injection Search - 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/products?search=' OR 1=1 --",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "' OR 1=1 --"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "21 - IDOR Order Access Blocked - 404",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/orders/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders",
+                "1"
               ]
             }
           },
@@ -1140,11 +1376,11 @@
   ],
   "variable": [
     {
-      "key": "customerToken",
+      "key": "adminToken",
       "value": ""
     },
     {
-      "key": "adminToken",
+      "key": "customerToken",
       "value": ""
     }
   ]
