@@ -18,7 +18,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"full_name\": \"Invalid Email User\",\r\n  \"email\": \"invalid-email\",\r\n  \"password\": \"Test12345\"\r\n}",
+              "raw": "{\r\n  \"full_name\": \"Security Test Customer\",\r\n  \"email\": \"securitycustomer2@test.com\",\r\n  \"password\": \"Security12345\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -78,7 +78,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"full_name\": \"Invalid Email User\",\r\n  \"email\": \"invalid-email\",\r\n  \"password\": \"Test12345\"\r\n}",
+              "raw": "{\r\n  \"full_name\": \"Security Test Customer\",\r\n  \"email\": \"securitycustomer2@test.com\",\r\n  \"password\": \"Security12345\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -246,6 +246,16 @@
         {
           "name": "06 - Invalid Token - 401",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "invalidtoken123",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -446,6 +456,45 @@
               "port": "3000",
               "path": [
                 ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19 - XSS Input as Data - 201",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"category_id\": 1,\r\n  \"name\": \"XSS Test Product\",\r\n  \"description\": \"<script>alert('xss')</script>\",\r\n  \"price\": 15,\r\n  \"stock_quantity\": 2,\r\n  \"sku\": \"XSS-TEST-001\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products"
               ]
             }
           },
